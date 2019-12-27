@@ -1,26 +1,21 @@
-import React from 'react';
+import React, {useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Exercise from './Exercise';
+import ExerciseForm from './ExerciseForm';
+import "./style.scss";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+  const [exercise, setExercise] = useState([]);
+  const onSubmit = data => setExercise([...exercise, data]);
+  return(
+    <>
+      <ExerciseForm onSubmit={onSubmit} />
+      {Object.keys(exercise).map(key => <Exercise 
+        key={key}
+        exercise={exercise[key]}
+      />)}
+    </>);
 }
 
 export default App;
