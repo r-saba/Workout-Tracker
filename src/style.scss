@@ -1,0 +1,25 @@
+.exercise {
+	&_form {
+		display: flex;
+		flex-direction: column;
+		input {
+			min-height: 50px;
+			font-size: 24px;
+		}
+	}
+	&_sets {
+		display: flex;
+	}
+	&_reps {
+		list-style: none;
+		margin-right: 20px;
+		border: 1px solid black;
+		border-radius: 50%;
+		min-width: 50px;
+		min-height: 50px;
+		font-size: 20px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+}

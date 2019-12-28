@@ -7,7 +7,10 @@ import "./style.scss";
 
 const App = () => {
   const [exercise, setExercise] = useState([]);
-  const onSubmit = data => setExercise([...exercise, data]);
+  const onSubmit = (data, e) => {
+    setExercise([...exercise, data]);
+    e.target.reset();
+  }
   return(
     <>
       <ExerciseForm onSubmit={onSubmit} />
