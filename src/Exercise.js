@@ -2,9 +2,23 @@ import React, {useState} from 'react';
 
 const Exercise = (props) => {
 	const sets =[]
-	for (var i = 0; i < props.exercise.Sets; i++) {
-		sets.push(<li className="exercise_reps" key={i}><span> {props.exercise.Reps} </span></li>)
+	const completedSet = (e) => {
+		console.log(e.target);
+		console.log(e.target.style);
+		e.target.style.backgroundColor = '#CD5C5C';
 	}
+
+	for (var i = 0; i < props.exercise.Sets; i++) {
+		sets.push(
+			<li 
+			className="exercise_reps" 
+			onClick={completedSet} 
+			key={i}>
+			<span> {props.exercise.Reps} </span>
+			</li>
+		)
+	}
+
 	return (
 		<div>
 			<h2>{props.exercise.Exercise}</h2>
