@@ -7,16 +7,23 @@ import "./style.scss";
 
 const App = () => {
   const [exercise, setExercise] = useState([]);
+
   const onSubmit = (data, e) => {
     setExercise([...exercise, data]);
     e.target.reset();
+  }
+
+  const completeExercise = (index) => {
+    exercise[index].Completed = "true";
   }
   return(
     <>
       <ExerciseForm onSubmit={onSubmit} />
       {Object.keys(exercise).map(key => <Exercise 
         key={key}
+        index={key}
         exercise={exercise[key]}
+        completeExercise={completeExercise}
       />)}
     </>);
 }
