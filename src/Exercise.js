@@ -26,7 +26,7 @@ const Exercise = (props) => {
 	}
 
 	let exerciseSets;
-	if (props.exercise.Completed == 'false') {
+	if (props.exercise.Completed != 'true') {
 		exerciseSets =	<ul className="exercise_sets"> {sets} </ul>;
 	}
 	else {
