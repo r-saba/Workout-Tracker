@@ -8,6 +8,8 @@ import "./style.scss";
 const App = () => {
   const [exercise, setExercise] = useState([]);
 
+  useEffect(() => alert("ayo!"));
+
   const onSubmit = (data, e) => {
     setExercise([...exercise, data]);
     e.target.reset();
