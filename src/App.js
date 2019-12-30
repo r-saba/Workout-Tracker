@@ -17,9 +17,9 @@ const App = () => {
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           exerciseData.push( doc.data());
-        });
-    });
-      setExercise(exerciseData);
+        })
+    })
+      .then(() => setExercise(exerciseData));
   }, [])
 
   const onSubmit = (data, e) => {
