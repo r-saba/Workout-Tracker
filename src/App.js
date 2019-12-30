@@ -16,6 +16,14 @@ const App = () => {
   const completeExercise = (index) => {
     exercise[index].Completed = "true";
   }
+
+  const removeExercise = (key) => {
+    const exerciseState = [...exercise];
+    console.log(exerciseState);
+    delete exerciseState[key];
+    exerciseState.splice(key, 1);
+    setExercise(exerciseState);
+  }
   return(
     <>
       <ExerciseForm onSubmit={onSubmit} />
@@ -24,6 +32,7 @@ const App = () => {
         index={key}
         exercise={exercise[key]}
         completeExercise={completeExercise}
+        removeExercise={removeExercise}
       />)}
     </>);
 }
