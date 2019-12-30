@@ -1,16 +1,33 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Exercise from './Exercise';
 import ExerciseForm from './ExerciseForm';
-import "./style.scss";
+import firebase from './firebase';
+import './style.scss';
 
 const App = () => {
   const [exercise, setExercise] = useState([]);
 
-  useEffect(() => alert("ayo!"));
+  useEffect(() => {
+    let exerciseData = [];
+    firebase.firestore()
+      .collection('exercise')
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          exerciseData.push( doc.data());
+        });
+    });
+      setExercise(exerciseData);
+  }, [])
 
   const onSubmit = (data, e) => {
+    firebase.firestore().collection("exercise").add({
+      name: data.Exercise,
+      sets: data.Sets,
+      reps: data.Reps,
+    })
     setExercise([...exercise, data]);
     e.target.reset();
   }
