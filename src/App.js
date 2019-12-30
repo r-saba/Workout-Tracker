@@ -24,9 +24,9 @@ const App = () => {
 
   const onSubmit = (data, e) => {
     firebase.firestore().collection("exercise").add({
-      name: data.Exercise,
-      sets: data.Sets,
-      reps: data.Reps,
+      Exercise: data.Exercise,
+      Sets: data.Sets,
+      Reps: data.Reps,
     })
     setExercise([...exercise, data]);
     e.target.reset();
