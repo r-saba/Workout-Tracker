@@ -4,8 +4,6 @@ const Exercise = (props) => {
 	const sets =[]
 	const [remainingSets, setRemainingSets] = useState(props.exercise.Sets-1);
 	const completedSet = (e) => {
-		console.log(e.target);
-		console.log(e.target.style);
 		e.target.style.backgroundColor = '#CD5C5C';
 		setRemainingSets(remainingSets-1);
 		if(remainingSets == 0) {

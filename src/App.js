@@ -19,7 +19,6 @@ const App = () => {
 
   const removeExercise = (key) => {
     const exerciseState = [...exercise];
-    console.log(exerciseState);
     delete exerciseState[key];
     exerciseState.splice(key, 1);
     setExercise(exerciseState);
