@@ -16,7 +16,9 @@ const App = () => {
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          exerciseData.push( doc.data());
+          let storedExercise = doc.data();
+          storedExercise['id'] = doc.id;
+          exerciseData.push(storedExercise);
         })
     })
       .then(() => setExercise(exerciseData));
@@ -37,8 +39,9 @@ const App = () => {
   }
 
   const removeExercise = (key) => {
+    firebase.firestore().collection("exercise").doc(exercise[key].id)
+      .delete()
     const exerciseState = [...exercise];
-    delete exerciseState[key];
     exerciseState.splice(key, 1);
     setExercise(exerciseState);
   }

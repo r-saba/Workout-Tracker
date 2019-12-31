@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 const Exercise = (props) => {
 	const sets =[]
@@ -27,7 +27,7 @@ const Exercise = (props) => {
 
 	let exerciseSets;
 	if (props.exercise.Completed != 'true') {
-		exerciseSets =	<ul className="exercise_sets"> {sets} </ul>;
+		exerciseSets =	<ul key={props.exercise.id} className="exercise_sets"> {sets} </ul>;
 	}
 	else {
 		exerciseSets = <p>All sets complete for {props.exercise.Exercise}</p>
@@ -35,8 +35,10 @@ const Exercise = (props) => {
 
 	return (
 		<div>
-			<h2>{props.exercise.Exercise}</h2>
-			<button onClick={() => props.removeExercise(props.index)}>X</button>
+			<div className="exercise_title">
+				<h2>{props.exercise.Exercise}</h2>
+				<button onClick={() => props.removeExercise(props.index)}>Remove Exercise</button>
+			</div>
 			{exerciseSets}
 		</div>
 	)
