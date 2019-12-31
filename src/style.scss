@@ -25,4 +25,8 @@
 			pointer-events: none;
 		}
 	}
+	&_title {
+		display: flex;
+		justify-content: space-between;
+	}
 }
