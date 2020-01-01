@@ -18,6 +18,7 @@ const App = () => {
         querySnapshot.forEach((doc) => {
           let storedExercise = doc.data();
           storedExercise['id'] = doc.id;
+          storedExercise['remainingSets'] = storedExercise['Sets'];
           exerciseData.push(storedExercise);
         })
     })
@@ -30,8 +31,16 @@ const App = () => {
       Sets: data.Sets,
       Reps: data.Reps,
     })
+    data.remainingSets = data.Sets;
     setExercise([...exercise, data]);
     e.target.reset();
+  }
+
+  const completedSet = (e, index) => {
+    let completedSetExercise = [...exercise];
+    completedSetExercise[index].remainingSets -= 1;
+    setExercise(completedSetExercise);
+    e.target.style.backgroundColor = '#CD5C5C';
   }
 
   const completeExercise = (index) => {
@@ -52,6 +61,7 @@ const App = () => {
         key={key}
         index={key}
         exercise={exercise[key]}
+        completedSet={completedSet}
         completeExercise={completeExercise}
         removeExercise={removeExercise}
       />)}
