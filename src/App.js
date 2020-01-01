@@ -8,10 +8,11 @@ import './style.scss';
 
 const App = () => {
   const [exercise, setExercise] = useState([]);
+  let db = firebase.firestore();
 
   useEffect(() => {
     let exerciseData = [];
-    firebase.firestore()
+    db
       .collection('exercise')
       .get()
       .then((querySnapshot) => {
@@ -26,14 +27,23 @@ const App = () => {
   }, [])
 
   const onSubmit = (data, e) => {
-    firebase.firestore().collection("exercise").add({
+    db.collection("exercise").add({
       Exercise: data.Exercise,
       Sets: data.Sets,
       Reps: data.Reps,
+      Weight: data.Weight
     })
     data.remainingSets = data.Sets;
     setExercise([...exercise, data]);
     e.target.reset();
+  }
+
+  const updateWeight = (data) => {
+    console.log(exercise[data.index]);
+    let exerciseToUpdate = db.collection("exercise").doc(exercise[data.index].id);
+    return exerciseToUpdate.update({
+      Weight: data.weight
+    })
   }
 
   const completedSet = (e, index) => {
@@ -54,6 +64,7 @@ const App = () => {
     exerciseState.splice(key, 1);
     setExercise(exerciseState);
   }
+
   return(
     <>
       <ExerciseForm onSubmit={onSubmit} />
@@ -61,6 +72,7 @@ const App = () => {
         key={key}
         index={key}
         exercise={exercise[key]}
+        updateWeight={updateWeight}
         completedSet={completedSet}
         completeExercise={completeExercise}
         removeExercise={removeExercise}

@@ -1,9 +1,12 @@
 import React, {useState, useEffect} from 'react';
+import { useForm } from 'react-hook-form';
 
 const Exercise = (props) => {
-	const sets =[]
+	const sets =[];
+	const { register, handleSubmit, watch } = useForm();
+	const watchWeight = watch('weight', props.exercise.Weight); // supply default value as second argument
 
-	useEffect(() => console.log('test'));
+	useEffect(() => console.log(watchWeight));
 
 	for (var i = 0; i < props.exercise.Sets; i++) {
 		sets.push(
@@ -28,6 +31,11 @@ const Exercise = (props) => {
 		<div>
 			<div className="exercise_title">
 				<h2>{props.exercise.Exercise}</h2>
+				<form onSubmit={handleSubmit(props.updateWeight)}>
+					<label>Weight</label>
+					<input name="weight" value={watchWeight} ref={register} type="text"/> 
+					<input name="index" value={props.index} ref={register} type="hidden"/> 
+				</form>
 				<button onClick={() => props.removeExercise(props.index)}>Remove Exercise</button>
 			</div>
 			{exerciseSets}
