@@ -30,7 +30,7 @@ const Exercise = (props) => {
 	return (
 		<div>
 			<div className="exercise_title">
-				<h2>{props.exercise.Exercise}</h2>
+				<h2>{props.index}</h2>
 				<form onSubmit={handleSubmit(props.updateWeight)}>
 					<label>Weight</label>
 					<input name="weight" value={watchWeight} ref={register} type="text"/> 

@@ -7,23 +7,20 @@ import firebase from './firebase';
 import './style.scss';
 
 const App = () => {
-  const [exercise, setExercise] = useState([]);
-  let db = firebase.firestore();
+  const [exercise, setExercise] = useState({});
+  let db = firebase.firestore().collection('exercise').doc("Day 1")
 
   useEffect(() => {
-    let exerciseData = [];
-    db
-      .collection('exercise')
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          let storedExercise = doc.data();
-          storedExercise['id'] = doc.id;
-          storedExercise['remainingSets'] = storedExercise['Sets'];
-          exerciseData.push(storedExercise);
-        })
-    })
-      .then(() => setExercise(exerciseData));
+    let exerciseData;
+      db.get()
+      .then((doc) => {
+        if(doc.exists) {
+          exerciseData = doc.data();
+        }
+      })
+      .then(() => {
+        setExercise(exerciseData);
+      })
   }, [])
 
   const onSubmit = (data, e) => {
@@ -39,10 +36,8 @@ const App = () => {
   }
 
   const updateWeight = (data) => {
-    console.log(exercise[data.index]);
-    let exerciseToUpdate = db.collection("exercise").doc(exercise[data.index].id);
-    return exerciseToUpdate.update({
-      Weight: data.weight
+    return db.update({
+       [data.index + '.Weight']: data.weight
     })
   }
 
@@ -65,19 +60,18 @@ const App = () => {
     setExercise(exerciseState);
   }
 
+  console.log(Object.keys(exercise))
+
   return(
-    <>
-      <ExerciseForm onSubmit={onSubmit} />
-      {Object.keys(exercise).map(key => <Exercise 
-        key={key}
-        index={key}
-        exercise={exercise[key]}
-        updateWeight={updateWeight}
-        completedSet={completedSet}
-        completeExercise={completeExercise}
-        removeExercise={removeExercise}
-      />)}
-    </>);
+    Object.keys(exercise).map(key => 
+      <Exercise 
+      key={key}
+      index={key}
+      exercise={exercise[key]}
+      updateWeight={updateWeight}
+      />
+    )
+  );
 }
 
 export default App;
