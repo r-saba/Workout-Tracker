@@ -3,13 +3,16 @@ import logo from './logo.svg';
 import './App.css';
 import Exercise from './Exercise';
 import ExerciseForm from './ExerciseForm';
+import Navbar from './Navbar';
 import firebase from './firebase';
 import './style.scss';
 
 const App = () => {
   const [exercise, setExercise] = useState({});
   const [exerciseDaysState, setExerciseDays] = useState({});
+  const [exerciseDay, setExerciseDay] = useState("");
   let db = firebase.firestore().collection('exercise');
+  if (exerciseDay === "") {setExerciseDay("Day 1")}
 
   useEffect(() => {
     let exerciseDays = [];
@@ -21,7 +24,7 @@ const App = () => {
     .then(setExerciseDays(exerciseDays));
 
     let exerciseData;
-      db.doc("Day 1").get()
+      db.doc(exerciseDay).get()
       .then((doc) => {
         if(doc.exists) {
           exerciseData = doc.data();
@@ -33,7 +36,7 @@ const App = () => {
       .then(() => {
         setExercise(exerciseData);
       })
-  }, [])
+  }, [exerciseDay])
 
   const onSubmit = (data, e) => {
     let exerciseData = {
@@ -67,14 +70,19 @@ const App = () => {
   }
 
   const removeExercise = (key) => {
-    db.doc("Day 1").update({[key]: firebase.firestore.FieldValue.delete()})
+    db.doc(exerciseDay).update({[key]: firebase.firestore.FieldValue.delete()})
     const exerciseState = {...exercise};
     delete exerciseState[key];
     setExercise(exerciseState);
   }
 
+  const selectDay = (val) => {
+    setExerciseDay(val);
+  }
+
   return(
     <>
+      <Navbar exerciseDaysState={exerciseDaysState} selectDay={selectDay}></Navbar>
       <ExerciseForm exerciseDaysState={exerciseDaysState} onSubmit={onSubmit} />
       {Object.keys(exercise).map(key => 
         <Exercise 
