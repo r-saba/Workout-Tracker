@@ -10,7 +10,7 @@ const Exercise = (props) => {
 		sets.push(
 			<li 
 			className="exercise_reps" 
-			onClick={(e) => props.completedSet(e, props.index)} 
+			onClick={(e) => props.completeSet(e, props.index)} 
 			key={i}>
 			<span> {props.exercise.Reps} </span>
 			</li>

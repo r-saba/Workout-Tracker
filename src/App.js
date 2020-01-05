@@ -55,7 +55,7 @@ const App = () => {
     })
   }
 
-  const completedSet = (e, index) => {
+  const completeSet = (e, index) => {
     let completedSetExercise = {...exercise};
     completedSetExercise[index].remainingSets -= 1;
     setExercise(completedSetExercise);
@@ -81,7 +81,7 @@ const App = () => {
         key={key}
         index={key}
         exercise={exercise[key]}
-        completedSet={completedSet}
+        completeSet={completeSet}
         updateWeight={updateWeight}
         removeExercise={removeExercise}
         />
