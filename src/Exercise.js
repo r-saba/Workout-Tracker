@@ -6,13 +6,11 @@ const Exercise = (props) => {
 	const { register, handleSubmit, watch } = useForm();
 	const watchWeight = watch('weight', props.exercise.Weight); // supply default value as second argument
 
-	useEffect(() => console.log(watchWeight));
-
 	for (var i = 0; i < props.exercise.Sets; i++) {
 		sets.push(
 			<li 
 			className="exercise_reps" 
-			onClick={(e) => props.completedSet(e, props.index)} 
+			onClick={(e) => props.completeSet(e, props.index)} 
 			key={i}>
 			<span> {props.exercise.Reps} </span>
 			</li>
@@ -30,7 +28,7 @@ const Exercise = (props) => {
 	return (
 		<div>
 			<div className="exercise_title">
-				<h2>{props.exercise.Exercise}</h2>
+				<h2>{props.index}</h2>
 				<form onSubmit={handleSubmit(props.updateWeight)}>
 					<label>Weight</label>
 					<input name="weight" value={watchWeight} ref={register} type="text"/> 

@@ -7,47 +7,56 @@ import firebase from './firebase';
 import './style.scss';
 
 const App = () => {
-  const [exercise, setExercise] = useState([]);
-  let db = firebase.firestore();
+  const [exercise, setExercise] = useState({});
+  const [exerciseDaysState, setExerciseDays] = useState({});
+  let db = firebase.firestore().collection('exercise');
 
   useEffect(() => {
-    let exerciseData = [];
+    let exerciseDays = [];
     db
-      .collection('exercise')
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          let storedExercise = doc.data();
-          storedExercise['id'] = doc.id;
-          storedExercise['remainingSets'] = storedExercise['Sets'];
-          exerciseData.push(storedExercise);
-        })
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => exerciseDays.push(doc.id));
     })
-      .then(() => setExercise(exerciseData));
+    .then(setExerciseDays(exerciseDays));
+
+    let exerciseData;
+      db.doc("Day 1").get()
+      .then((doc) => {
+        if(doc.exists) {
+          exerciseData = doc.data();
+        }
+      })
+      .then(() => {
+        Object.keys(exerciseData).map(key => exerciseData[key].remainingSets = exerciseData[key].Sets);
+      })
+      .then(() => {
+        setExercise(exerciseData);
+      })
   }, [])
 
   const onSubmit = (data, e) => {
-    db.collection("exercise").add({
-      Exercise: data.Exercise,
-      Sets: data.Sets,
-      Reps: data.Reps,
-      Weight: data.Weight
-    })
+    let exerciseData = {
+      [data.Exercise]: {
+        Sets: data.Sets,
+        Reps: data.Reps,
+        Weight: data.Weight
+      }
+    }
+    db.doc(data.day).update(exerciseData);
     data.remainingSets = data.Sets;
-    setExercise([...exercise, data]);
+    setExercise({...exercise, ...exerciseData});
     e.target.reset();
   }
 
   const updateWeight = (data) => {
-    console.log(exercise[data.index]);
-    let exerciseToUpdate = db.collection("exercise").doc(exercise[data.index].id);
-    return exerciseToUpdate.update({
-      Weight: data.weight
+    return db.update({
+       [data.index + '.Weight']: data.weight
     })
   }
 
-  const completedSet = (e, index) => {
-    let completedSetExercise = [...exercise];
+  const completeSet = (e, index) => {
+    let completedSetExercise = {...exercise};
     completedSetExercise[index].remainingSets -= 1;
     setExercise(completedSetExercise);
     e.target.style.backgroundColor = '#CD5C5C';
@@ -58,26 +67,27 @@ const App = () => {
   }
 
   const removeExercise = (key) => {
-    firebase.firestore().collection("exercise").doc(exercise[key].id)
-      .delete()
-    const exerciseState = [...exercise];
-    exerciseState.splice(key, 1);
+    db.doc("Day 1").update({[key]: firebase.firestore.FieldValue.delete()})
+    const exerciseState = {...exercise};
+    delete exerciseState[key];
     setExercise(exerciseState);
   }
 
   return(
     <>
-      <ExerciseForm onSubmit={onSubmit} />
-      {Object.keys(exercise).map(key => <Exercise 
+      <ExerciseForm exerciseDaysState={exerciseDaysState} onSubmit={onSubmit} />
+      {Object.keys(exercise).map(key => 
+        <Exercise 
         key={key}
         index={key}
         exercise={exercise[key]}
+        completeSet={completeSet}
         updateWeight={updateWeight}
-        completedSet={completedSet}
-        completeExercise={completeExercise}
         removeExercise={removeExercise}
-      />)}
-    </>);
+        />
+      )}
+    </>
+  );
 }
 
 export default App;
