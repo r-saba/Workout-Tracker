@@ -67,7 +67,6 @@ const App = () => {
   }
 
   const removeExercise = (key) => {
-    console.log(key);
     db.doc("Day 1").update({[key]: firebase.firestore.FieldValue.delete()})
     const exerciseState = {...exercise};
     delete exerciseState[key];

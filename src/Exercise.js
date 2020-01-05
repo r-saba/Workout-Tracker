@@ -6,8 +6,6 @@ const Exercise = (props) => {
 	const { register, handleSubmit, watch } = useForm();
 	const watchWeight = watch('weight', props.exercise.Weight); // supply default value as second argument
 
-	useEffect(() => console.log(watchWeight));
-
 	for (var i = 0; i < props.exercise.Sets; i++) {
 		sets.push(
 			<li 
