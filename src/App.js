@@ -67,10 +67,10 @@ const App = () => {
   }
 
   const removeExercise = (key) => {
-    firebase.firestore().collection("exercise").doc(exercise[key].id)
-      .delete()
-    const exerciseState = [...exercise];
-    exerciseState.splice(key, 1);
+    console.log(key);
+    db.doc("Day 1").update({[key]: firebase.firestore.FieldValue.delete()})
+    const exerciseState = {...exercise};
+    delete exerciseState[key];
     setExercise(exerciseState);
   }
 
@@ -82,8 +82,9 @@ const App = () => {
         key={key}
         index={key}
         exercise={exercise[key]}
-        updateWeight={updateWeight}
         completedSet={completedSet}
+        updateWeight={updateWeight}
+        removeExercise={removeExercise}
         />
       )}
     </>
