@@ -13,7 +13,7 @@ export default function ExerciseForm(props) {
       <input type="number" placeholder="Starting Weight" name="Weight" ref={register({required: true, maxLength: 100})} />
       <input type="hidden" name="Completed" value="false" ref={register} />
       <select name="day" ref={register}>
-        {Object.keys(exerciseDays).map(key => <option value={exerciseDays[key]}>{exerciseDays[key]}</option>)}
+        {Object.keys(exerciseDays).map(key => <option key={key} value={exerciseDays[key]}>{exerciseDays[key]}</option>)}
       </select>
       <input type="submit" />
     </form>
