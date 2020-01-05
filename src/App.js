@@ -8,11 +8,20 @@ import './style.scss';
 
 const App = () => {
   const [exercise, setExercise] = useState({});
-  let db = firebase.firestore().collection('exercise').doc("Day 1")
+  const [exerciseDaysState, setExerciseDays] = useState({});
+  let db = firebase.firestore().collection('exercise');
 
   useEffect(() => {
+    let exerciseDays = [];
+    db
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => exerciseDays.push(doc.id));
+    })
+    .then(setExerciseDays(exerciseDays));
+
     let exerciseData;
-      db.get()
+      db.doc("Day 1").get()
       .then((doc) => {
         if(doc.exists) {
           exerciseData = doc.data();
@@ -24,14 +33,16 @@ const App = () => {
   }, [])
 
   const onSubmit = (data, e) => {
-    db.collection("exercise").add({
-      Exercise: data.Exercise,
-      Sets: data.Sets,
-      Reps: data.Reps,
-      Weight: data.Weight
-    })
+    let exerciseData = {
+      [data.Exercise]: {
+        Sets: data.Sets,
+        Reps: data.Reps,
+        Weight: data.Weight
+      }
+    }
+    db.doc(data.day).update(exerciseData);
     data.remainingSets = data.Sets;
-    setExercise([...exercise, data]);
+    setExercise({...exercise, ...exerciseData});
     e.target.reset();
   }
 
@@ -63,14 +74,17 @@ const App = () => {
   console.log(Object.keys(exercise))
 
   return(
-    Object.keys(exercise).map(key => 
-      <Exercise 
-      key={key}
-      index={key}
-      exercise={exercise[key]}
-      updateWeight={updateWeight}
-      />
-    )
+    <>
+      <ExerciseForm exerciseDaysState={exerciseDaysState} onSubmit={onSubmit} />
+      {Object.keys(exercise).map(key => 
+        <Exercise 
+        key={key}
+        index={key}
+        exercise={exercise[key]}
+        updateWeight={updateWeight}
+        />
+      )}
+    </>
   );
 }
 
