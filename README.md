@@ -8,7 +8,8 @@ Clone the project locally. Install node modules. Run npm start. The app will be 
 
 ## Built With
 
-* [React](https://reactjs.org/) - The web framework used
+* [React](https://reactjs.org/) - The web framework used.
+* [Firebase](https://firebase.google.com/) - Cloud storage and user authentication.
 
 ## Authors
 
