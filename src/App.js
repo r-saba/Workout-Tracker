@@ -28,6 +28,9 @@ const App = () => {
         }
       })
       .then(() => {
+        Object.keys(exerciseData).map(key => exerciseData[key].remainingSets = exerciseData[key].Sets);
+      })
+      .then(() => {
         setExercise(exerciseData);
       })
   }, [])
@@ -53,7 +56,7 @@ const App = () => {
   }
 
   const completedSet = (e, index) => {
-    let completedSetExercise = [...exercise];
+    let completedSetExercise = {...exercise};
     completedSetExercise[index].remainingSets -= 1;
     setExercise(completedSetExercise);
     e.target.style.backgroundColor = '#CD5C5C';
@@ -71,8 +74,6 @@ const App = () => {
     setExercise(exerciseState);
   }
 
-  console.log(Object.keys(exercise))
-
   return(
     <>
       <ExerciseForm exerciseDaysState={exerciseDaysState} onSubmit={onSubmit} />
@@ -82,6 +83,7 @@ const App = () => {
         index={key}
         exercise={exercise[key]}
         updateWeight={updateWeight}
+        completedSet={completedSet}
         />
       )}
     </>
