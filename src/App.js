@@ -11,6 +11,7 @@ const App = () => {
   const [exercise, setExercise] = useState({});
   const [exerciseDaysState, setExerciseDays] = useState({});
   const [exerciseDay, setExerciseDay] = useState("");
+  
   let db = firebase.firestore().collection('exercise');
   if (exerciseDay === "") {setExerciseDay("Day 1")}
 
@@ -47,7 +48,7 @@ const App = () => {
       }
     }
     db.doc(data.day).update(exerciseData);
-    data.remainingSets = data.Sets;
+    exerciseData[data.Exercise].remainingSets = exerciseData[data.Exercise].Sets; 
     setExercise({...exercise, ...exerciseData});
     e.target.reset();
   }
