@@ -31,7 +31,7 @@ const Exercise = (props) => {
 				<h2>{props.index}</h2>
 				<form onSubmit={handleSubmit(props.updateWeight)}>
 					<label>Weight</label>
-					<input name="weight" value={watchWeight} ref={register} type="text"/> 
+					<input className="weight-input" name="weight" value={watchWeight} ref={register} type="text"/> 
 					<input name="index" value={props.index} ref={register} type="hidden"/> 
 				</form>
 				<button onClick={() => props.removeExercise(props.index)}>Remove Exercise</button>

@@ -11,6 +11,7 @@ const App = () => {
   const [exercise, setExercise] = useState({});
   const [exerciseDaysState, setExerciseDays] = useState({});
   const [exerciseDay, setExerciseDay] = useState("");
+  const [exerciseFormState, setExerciseFormState] = useState(false);
   
   let db = firebase.firestore().collection('exercise');
   if (exerciseDay === "") {setExerciseDay("Day 1")}
@@ -59,6 +60,10 @@ const App = () => {
     })
   }
 
+  const updateExerciseFormState = () => {
+    setExerciseFormState(!exerciseFormState);
+  }
+
   const completeSet = (e, index) => {
     let completedSetExercise = {...exercise};
     completedSetExercise[index].remainingSets -= 1;
@@ -81,10 +86,15 @@ const App = () => {
     setExerciseDay(val);
   }
 
+  let exerciseForm;
+  if(exerciseFormState)
+    exerciseForm = <ExerciseForm exerciseDaysState={exerciseDaysState} onSubmit={onSubmit} />;
+
+
   return(
     <>
-      <Navbar exerciseDaysState={exerciseDaysState} selectDay={selectDay}></Navbar>
-      <ExerciseForm exerciseDaysState={exerciseDaysState} onSubmit={onSubmit} />
+      <Navbar exerciseDaysState={exerciseDaysState} updateExerciseFormState={updateExerciseFormState} selectDay={selectDay}></Navbar>
+      {exerciseForm}
       {Object.keys(exercise).map(key => 
         <Exercise 
         key={key}
