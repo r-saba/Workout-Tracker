@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { useForm } from 'react-hook-form';
+import {Card, Button, Form} from 'react-bootstrap';
+
 
 const Exercise = (props) => {
 	const sets =[];
@@ -27,16 +29,25 @@ const Exercise = (props) => {
 
 	return (
 		<div>
+			<Card body>
+				<Card.Title>{props.index}</Card.Title>
+				{exerciseSets}
+				<div className="remove-exercise-container">
+				<Form onSubmit={handleSubmit(props.updateWeight)}>
+				  <Form.Group controlId="formGroupWeight" className="exercise__weight-form">
+				    <Card.Text className="card-weight">Weight</Card.Text>
+				    <Form.Control type="number" className="exercise__weight" name="weight" value={watchWeight} ref={register}/>
+				    <Card.Text>lbs</Card.Text>
+				  </Form.Group>
+				  <Form.Group controlId="formGroupWeight">
+				    <Form.Control type="hidden" name="index" value={props.index} ref={register}/>
+				  </Form.Group>
+				</Form>
+				<Button onClick={() => props.removeExercise(props.index)} variant="primary">Remove Exercise</Button>
+				</div>
+			</Card>
 			<div className="exercise_title">
-				<h2>{props.index}</h2>
-				<form onSubmit={handleSubmit(props.updateWeight)}>
-					<label>Weight</label>
-					<input className="weight-input" name="weight" value={watchWeight} ref={register} type="text"/> 
-					<input name="index" value={props.index} ref={register} type="hidden"/> 
-				</form>
-				<button onClick={() => props.removeExercise(props.index)}>Remove Exercise</button>
 			</div>
-			{exerciseSets}
 		</div>
 	)
 }

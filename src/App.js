@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
+import { TransitionGroup, CSSTransition } from "react-transition-group"
 import logo from './logo.svg';
 import './App.css';
 import Exercise from './Exercise';
 import ExerciseForm from './ExerciseForm';
-import Navbar from './Navbar';
+import NavigationBar from './NavigationBar';
 import firebase from './firebase';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.scss';
 
 const App = () => {
@@ -55,8 +57,8 @@ const App = () => {
   }
 
   const updateWeight = (data) => {
-    return db.update({
-       [data.index + '.Weight']: data.weight
+    db.doc(exerciseDay).update({
+      [data.index + ".Weight"] : data.weight
     })
   }
 
@@ -88,13 +90,26 @@ const App = () => {
 
   let exerciseForm;
   if(exerciseFormState)
-    exerciseForm = <ExerciseForm exerciseDaysState={exerciseDaysState} onSubmit={onSubmit} />;
+    exerciseForm = <CSSTransition
+        timeout={300}
+        classNames="alert"
+        unmountOnExit
+      >
+        <ExerciseForm exerciseDaysState={exerciseDaysState} onSubmit={onSubmit} />
+      </CSSTransition> ;
 
 
   return(
     <>
-      <Navbar exerciseDaysState={exerciseDaysState} updateExerciseFormState={updateExerciseFormState} selectDay={selectDay}></Navbar>
-      {exerciseForm}
+      <NavigationBar exerciseDaysState={exerciseDaysState} updateExerciseFormState={updateExerciseFormState} selectDay={selectDay}></NavigationBar>
+      <CSSTransition
+        in={exerciseFormState}
+        timeout={{enter: 3000, exit: 3000}}
+        classNames="exerciseForm"
+        unmountOnExit
+      >
+        <ExerciseForm exerciseDaysState={exerciseDaysState} onSubmit={onSubmit} />
+      </CSSTransition> 
       {Object.keys(exercise).map(key => 
         <Exercise 
         key={key}
