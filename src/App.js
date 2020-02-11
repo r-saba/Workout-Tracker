@@ -112,7 +112,7 @@ const App = () => {
       </CSSTransition> 
       {Object.keys(exercise).map(key => 
         <Exercise 
-        key={key}
+        key={key + exerciseDay + exercise[key].Weight } //fix key here to make unique.
         index={key}
         exercise={exercise[key]}
         completeSet={completeSet}
