@@ -43,6 +43,7 @@ const App = () => {
   }, [exerciseDay])
 
   const onSubmit = (data, e) => {
+    console.log(data);
     let exerciseData = {
       [data.Exercise]: {
         Sets: data.Sets,
@@ -51,8 +52,10 @@ const App = () => {
       }
     }
     db.doc(data.day).update(exerciseData);
-    exerciseData[data.Exercise].remainingSets = exerciseData[data.Exercise].Sets; 
-    setExercise({...exercise, ...exerciseData});
+    exerciseData[data.Exercise].remainingSets = exerciseData[data.Exercise].Sets;
+    if(data.day == exerciseDay){ 
+      setExercise({...exercise, ...exerciseData});
+    }
     e.target.reset();
   }
 
