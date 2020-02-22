@@ -13,6 +13,7 @@ const NavigationBar = (props) =>  {
 			<Nav className="mr-auto">
 			  <Nav.Link onClick={() => props.updateExerciseFormState()}>Add Exercise</Nav.Link>
 			  {Object.keys(exerciseDays).map(key => <Nav.Link key={key}><a onClick={() => props.selectDay(exerciseDays[key])}>{exerciseDays[key]}</a></Nav.Link>)}
+			  <Nav.Link onClick={() => props.handleShow()}>Add Day</Nav.Link>
 			</Nav>
 			</Navbar.Collapse>
 		</Navbar>

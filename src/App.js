@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { TransitionGroup, CSSTransition } from "react-transition-group"
+import ModalForm from './ModalForm.js';
 import logo from './logo.svg';
 import './App.css';
 import Exercise from './Exercise';
@@ -14,6 +15,10 @@ const App = () => {
   const [exerciseDaysState, setExerciseDays] = useState({});
   const [exerciseDay, setExerciseDay] = useState("");
   const [exerciseFormState, setExerciseFormState] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
   
   let db = firebase.firestore().collection('exercise');
   if (exerciseDay === "") {setExerciseDay("Day 1")}
@@ -65,6 +70,12 @@ const App = () => {
     })
   }
 
+  const updateDays = (data) => {
+    // have to check not rewriting existing doc
+    db.doc(data.workoutDay).set({});
+    setExerciseDays([...exerciseDaysState, data.workoutDay])
+  }
+
   const updateExerciseFormState = () => {
     setExerciseFormState(!exerciseFormState);
   }
@@ -104,14 +115,14 @@ const App = () => {
 
   return(
     <>
-      <NavigationBar exerciseDaysState={exerciseDaysState} updateExerciseFormState={updateExerciseFormState} selectDay={selectDay}></NavigationBar>
+      <NavigationBar exerciseDaysState={exerciseDaysState} updateExerciseFormState={updateExerciseFormState} selectDay={selectDay} handleShow={handleShow}></NavigationBar>
       <CSSTransition
         in={exerciseFormState}
         timeout={{enter: 3000, exit: 3000}}
         classNames="exerciseForm"
         unmountOnExit
       >
-        <ExerciseForm exerciseDaysState={exerciseDaysState} onSubmit={onSubmit} />
+        <ExerciseForm exerciseDaysState={exerciseDaysState} updateDays={updateDays} onSubmit={onSubmit} />
       </CSSTransition> 
       {Object.keys(exercise).map(key => 
         <Exercise 
@@ -123,6 +134,12 @@ const App = () => {
         removeExercise={removeExercise}
         />
       )}
+      <ModalForm
+        updateDays = {updateDays}
+        showModal = {showModal}
+        handleClose = {handleClose}
+        handleShow = {handleShow}
+      ></ModalForm>
     </>
   );
 }
