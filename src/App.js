@@ -16,8 +16,8 @@ const App = () => {
   const [exerciseDay, setExerciseDay] = useState("");
   const [exerciseFormState, setExerciseFormState] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [isInvalid, setisInvalid] = useState(false);
   
-  const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
   
   let db = firebase.firestore().collection('exercise');
@@ -72,8 +72,14 @@ const App = () => {
 
   const updateDays = (data) => {
     // have to check not rewriting existing doc
-    db.doc(data.workoutDay).set({});
-    setExerciseDays([...exerciseDaysState, data.workoutDay])
+    if(!exerciseDaysState.includes(data.workoutDay)){
+      setisInvalid(false);
+      db.doc(data.workoutDay).set({});
+      setExerciseDays([...exerciseDaysState, data.workoutDay])
+      setShowModal(false);
+    }
+    else
+      setisInvalid(true);
   }
 
   const updateExerciseFormState = () => {
@@ -137,8 +143,8 @@ const App = () => {
       <ModalForm
         updateDays = {updateDays}
         showModal = {showModal}
-        handleClose = {handleClose}
         handleShow = {handleShow}
+        isInvalid = {isInvalid}
       ></ModalForm>
     </>
   );

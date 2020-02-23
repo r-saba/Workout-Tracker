@@ -1,12 +1,15 @@
 import React, {useState} from 'react';
 import { useForm } from 'react-hook-form';
-import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import { Modal, Button, Form, Row, Col, FormCheck } from 'react-bootstrap';
 
 
 
 export default function ModalForm(props) {
   const { register, handleSubmit, reset } = useForm();
-
+  var formCheck;
+  if(props.isInvalid) {
+    formCheck = <Form.Control.Feedback type="invalid">This day already exists</Form.Control.Feedback>
+  }
   return (
     <>
       <Modal show={props.showModal} onHide={props.handleClose}>
@@ -18,7 +21,8 @@ export default function ModalForm(props) {
         <Modal.Body>
             <Row>
               <Col>
-                <Form.Control name="workoutDay" type="text" placeholder="Workout day" ref={register} />
+                <Form.Control name="workoutDay" type="text" placeholder="Workout day" ref={register} isInvalid={props.isInvalid} />
+                {formCheck}
               </Col>
             </Row>
         </Modal.Body>
@@ -26,7 +30,7 @@ export default function ModalForm(props) {
           <Button variant="secondary" onClick={props.handleClose}>
             Close
           </Button>
-          <Button type="submit" variant="primary" onClick={props.handleClose}>
+          <Button type="submit" variant="primary">
             Save Changes
           </Button>
         </Modal.Footer>
